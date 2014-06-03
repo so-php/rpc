@@ -1,0 +1,13 @@
+{
+    "name": "so-php/rpc",
+    "description": "RPC pattern via php-amqplib",
+    "require": {
+        "phpunit/phpunit": "3.7.*",
+        "zendframework/zend-code": "2.3.*@dev",
+        "videlalvaro/php-amqplib": "*",
+        "so-php/php-amqplib-extensions": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {"SoPhp\\": "src/SoPhp"}
+    }
+}
