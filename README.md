@@ -30,7 +30,6 @@ Words in uppercase are values that need to be supplied/configured.
 First we need to start an RPC Server queue and bind it a class/method.
 
 ```
-<?php
 $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
