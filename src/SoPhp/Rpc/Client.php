@@ -9,6 +9,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use SoPhp\Amqp\EndpointDescriptor;
 use SoPhp\Amqp\QueueDescriptor;
 use SoPhp\Rpc\Exception\RpcException;
+use SoPhp\Rpc\Exception\Server\TimeoutException;
 
 /**
  * Class Client
@@ -28,6 +29,8 @@ class Client {
     protected $requestId;
     /** @var  string */
     protected $response;
+    /** @var  int milliseconds */
+    protected $timeout = 250;
 
     /**
      * @return AMQPChannel
@@ -127,6 +130,24 @@ class Client {
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param int $timeout
+     * @return self
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
 
 
 
@@ -182,7 +203,11 @@ class Client {
         );
 
         $this->setResponse(null);
+        $start = microtime(true);
         while ($this->getResponse() === null) {
+            if(microtime(true) - $start > $this->getTimeout()){
+                throw new TimeoutException("RPC call timed out");
+            }
             $this->getChannel()->wait();
         }
 
