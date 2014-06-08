@@ -208,7 +208,7 @@ class Client {
             if(microtime(true) - $start > $this->getTimeout()){
                 throw new TimeoutException("RPC call timed out");
             }
-            $this->getChannel()->wait();
+            $this->getChannel()->wait(null, null, $this->getTimeout()/1000);
         }
 
         return $this->getResponse();
