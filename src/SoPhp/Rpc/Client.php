@@ -17,7 +17,7 @@ use SoPhp\Rpc\Exception\Server\TimeoutException;
  * @package SoPhp\Framework\Rpc
  * TODO use behaviour pattern to supply default/exception-handling behaviour
  */
-class Client {
+class Client implements ServiceInterface {
     /** @var  AMQPChannel */
     protected $channel;
     /** @var  EndpointDescriptor */
@@ -63,7 +63,7 @@ class Client {
      * @param EndpointDescriptor $endpoint
      * @return self
      */
-    public function setEndpoint($endpoint)
+    public function setEndpoint(EndpointDescriptor $endpoint)
     {
         $this->endpoint = $endpoint;
         return $this;

@@ -13,7 +13,7 @@ use SoPhp\Rpc\Call;
 use SoPhp\Rpc\Exception\Server\InvalidArgumentException;
 use SoPhp\Rpc\Exception\ServerException;
 
-class Server {
+class Server implements ServiceInterface {
     /** @var  EndpointDescriptor */
     protected $endpoint;
     /** @var  QueueDescriptor */
@@ -78,7 +78,7 @@ class Server {
      * @param EndpointDescriptor $endpoint
      * @return self
      */
-    public function setEndpoint($endpoint)
+    public function setEndpoint(EndpointDescriptor $endpoint)
     {
         $this->endpoint = $endpoint;
         return $this;
@@ -228,14 +228,7 @@ class Server {
     {
         $call = Call::fromJson($msg->body);
         try {
-            $delegate = $this->getDelegate();
-            $callable = is_callable($delegate) ? $delegate : array($delegate, $call->getMethod());
-
-            if(!is_callable($callable)){
-                // TODO return fault
-            }
-            $result = call_user_func_array($callable, $call->getArguments());
-
+            $result = $this->call($call->getMethod(), $call->getArguments());
 
             $msg->delivery_info['channel']
                 ->basic_ack($msg->delivery_info['delivery_tag']);
@@ -259,6 +252,22 @@ class Server {
 
     public function wait(){
         $this->getChannel()->wait();
+    }
+
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
+    public function call($name, $arguments)
+    {
+        $delegate = $this->getDelegate();
+        $callable = is_callable($delegate) ? $delegate : array($delegate, $name);
+
+        if(!is_callable($callable)){
+            // TODO return fault
+        }
+        return call_user_func_array($callable, $arguments);
     }
 
 
