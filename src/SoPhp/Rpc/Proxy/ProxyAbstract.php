@@ -5,32 +5,34 @@ namespace SoPhp\Rpc\Proxy;
 
 
 use SoPhp\Rpc\Client;
-use SoPhp\Rpc\ClientAwareInterface;
+use SoPhp\Rpc\ServiceAwareInterface;
+use SoPhp\Rpc\ServiceInterface;
 
-abstract class ProxyAbstract implements ClientAwareInterface {
-    /** @var  Client */
-    private $client;
+abstract class ProxyAbstract implements ServiceAwareInterface {
+    /** @var  ServiceInterface */
+    private $service;
     /**
-     * @param Client $client
+     * @param ServiceInterface $service
      */
-    public function __setClient(Client $client)
+    public function __setService(ServiceInterface $service)
     {
-        $this->client = $client;
+        $this->service = $service;
     }
 
     /**
-     * @return Client
+     * @return ServiceInterface
      */
-    public function __getClient()
+    public function __getService()
     {
-        return $this->client;
+        return $this->service;
     }
 
     /**
      * @param string $name
      * @param array $params
+     * @return mixed
      */
     public function __call($name, $params){
-        return $this->__getClient()->call($name, $params);
+        return $this->__getService()->call($name, $params);
     }
 }
