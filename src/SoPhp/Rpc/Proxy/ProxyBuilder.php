@@ -30,7 +30,7 @@ class ProxyBuilder {
 
 
     /**
-     * Generates a dynamic class implementing specified interfaces (and ClientAwareInterface).
+     * Generates a dynamic class implementing specified interfaces (and ServiceAwareInterface).
      * @return string class name
      */
     public function build(){

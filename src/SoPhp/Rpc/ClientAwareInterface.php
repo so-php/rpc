@@ -10,10 +10,10 @@ interface ClientAwareInterface {
     /**
      * @param Client $client
      */
-    public function __setClient(Client $client);
+    public function __setService(Client $client);
 
     /**
      * @return Client
      */
-    public function __getClient();
+    public function __getService();
 } 
